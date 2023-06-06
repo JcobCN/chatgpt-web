@@ -4,7 +4,7 @@ import { computed, defineAsyncComponent, nextTick, onMounted, onUnmounted, ref, 
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import type { MessageReactive } from 'naive-ui'
-import { NAutoComplete, NButton, NInput, NSelect, NSpace, NSpin, useDialog, useMessage } from 'naive-ui'
+import { NAutoComplete, NButton, NInput, NSpace, NSpin, useDialog, useMessage } from 'naive-ui'
 import html2canvas from 'html2canvas'
 import { Message } from './components'
 import { useScroll } from './hooks/useScroll'
@@ -13,12 +13,12 @@ import HeaderComponent from './components/Header/index.vue'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { useAuthStore, useChatStore, usePromptStore, useUserStore } from '@/store'
-import { fetchChatAPIProcess, fetchChatResponseoHistory, fetchChatStopResponding, fetchUpdateUserChatModel } from '@/api'
+import { fetchChatAPIProcess, fetchChatResponseoHistory, fetchChatStopResponding } from '@/api'
 import { t } from '@/locales'
 import { debounce } from '@/utils/functions/debounce'
-import IconPrompt from '@/icons/Prompt.vue'
-import { UserConfig } from '@/components/common/Setting/model'
-import type { CHATMODEL } from '@/components/common/Setting/model'
+// import IconPrompt from '@/icons/Prompt.vue'
+// import { UserConfig } from '@/components/common/Setting/model'
+// import type { CHATMODEL } from '@/components/common/Setting/model'
 const Prompt = defineAsyncComponent(() => import('@/components/common/Setting/Prompt.vue'))
 
 let controller = new AbortController()
@@ -437,20 +437,20 @@ function handleDelete(index: number) {
   })
 }
 
-function handleClear() {
-  if (loading.value)
-    return
+// function handleClear() {
+//   if (loading.value)
+//     return
 
-  dialog.warning({
-    title: t('chat.clearChat'),
-    content: t('chat.clearChatConfirm'),
-    positiveText: t('common.yes'),
-    negativeText: t('common.no'),
-    onPositiveClick: () => {
-      chatStore.clearChatByUuid(+uuid)
-    },
-  })
-}
+//   dialog.warning({
+//     title: t('chat.clearChat'),
+//     content: t('chat.clearChatConfirm'),
+//     positiveText: t('common.yes'),
+//     negativeText: t('common.no'),
+//     onPositiveClick: () => {
+//       chatStore.clearChatByUuid(+uuid)
+//     },
+//   })
+// }
 
 function handleEnter(event: KeyboardEvent) {
   if (!isMobile.value) {
@@ -576,13 +576,13 @@ const footerClass = computed(() => {
   return classes
 })
 
-async function handleSyncChatModel(chatModel: CHATMODEL) {
-  if (userStore.userInfo.config == null)
-    userStore.userInfo.config = new UserConfig()
-  userStore.userInfo.config.chatModel = chatModel
-  userStore.recordState()
-  await fetchUpdateUserChatModel(chatModel)
-}
+// async function handleSyncChatModel(chatModel: CHATMODEL) {
+//   if (userStore.userInfo.config == null)
+//     userStore.userInfo.config = new UserConfig()
+//   userStore.userInfo.config.chatModel = chatModel
+//   userStore.recordState()
+//   await fetchUpdateUserChatModel(chatModel)
+// }
 
 onMounted(() => {
   firstLoading.value = true
@@ -662,33 +662,33 @@ onUnmounted(() => {
       <div class="w-full max-w-screen-xl m-auto">
         <NSpace vertical>
           <div class="flex items-center space-x-2">
-            <HoverButton @click="handleClear">
+            <!-- <HoverButton @click="handleClear">
               <span class="text-xl text-[#4f555e] dark:text-white">
                 <SvgIcon icon="ri:delete-bin-line" />
               </span>
-            </HoverButton>
+            </HoverButton> -->
             <HoverButton v-if="!isMobile" @click="handleExport">
               <span class="text-xl text-[#4f555e] dark:text-white">
                 <SvgIcon icon="ri:download-2-line" />
               </span>
             </HoverButton>
-            <HoverButton v-if="!isMobile" @click="showPrompt = true">
+            <!-- <HoverButton v-if="!isMobile" @click="showPrompt = true">
               <span class="text-xl text-[#4f555e] dark:text-white">
                 <IconPrompt class="w-[20px] m-auto" />
               </span>
-            </HoverButton>
-            <HoverButton v-if="!isMobile" @click="handleToggleUsingContext">
+            </HoverButton> -->
+            <!-- <HoverButton v-if="!isMobile" @click="handleToggleUsingContext">
               <span class="text-xl" :class="{ 'text-[#4b9e5f]': usingContext, 'text-[#a8071a]': !usingContext }">
                 <SvgIcon icon="ri:chat-history-line" />
               </span>
-            </HoverButton>
-            <NSelect
+            </HoverButton> -->
+            <!-- <NSelect
               style="width: 250px"
               :value="userStore.userInfo.config.chatModel"
               :options="authStore.session?.chatModels"
               :disabled="!!authStore.session?.auth && !authStore.token"
               @update-value="(val) => handleSyncChatModel(val)"
-            />
+            /> -->
           </div>
           <div class="flex items-center justify-between space-x-2">
             <NAutoComplete v-model:value="prompt" :options="searchOptions" :render-label="renderOption">
